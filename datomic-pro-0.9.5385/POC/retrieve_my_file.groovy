@@ -84,7 +84,7 @@ else{
 
 uri = "datomic:sql://thales?jdbc:postgresql://localhost:5432/datomic?user=datomic&password=datomic";
 
-Peer.createDatabase(uri);
+
 conn = Peer.connect(uri);
 
 
