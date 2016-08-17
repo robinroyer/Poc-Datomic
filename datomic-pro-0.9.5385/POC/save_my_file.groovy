@@ -4,6 +4,7 @@ import datomic.Peer
 import datomic.Connection
 import datomic.Util
 import org.apache.commons.io.IOUtils
+import java.io.BufferedReader
 
 // ./bin/groovysh ./POC/save_my_file.groovy -tag=thetag -file=POC/datomic_input/file_to_save.txt -version=myversion -satelite=satelitename
 
@@ -83,6 +84,7 @@ catch(Exception e) {
 
 
 println "===================================== Storing files to  datomic";
+
 try {
   File file = new File( FILE);
   BufferedReader reader = new BufferedReader(new FileReader (file));
@@ -96,13 +98,11 @@ try {
       }
 
       data = stringBuilder.toString();
-  }
+ reader.close();
+ }
   catch(e){
     println "error in file reading"
     System.exit(0)
-  }
-  finally {
-      reader.close();
   }
 
 
