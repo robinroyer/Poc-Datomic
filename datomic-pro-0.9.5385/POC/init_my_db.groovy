@@ -6,7 +6,7 @@ import datomic.Connection
 import datomic.Util
 
 SCHEMA_PATH = "./POC/test-schema.edn";
-uri = "datomic:mem://coucou";
+uri = "datomic:sql://thales?jdbc:postgresql://localhost:5432/datomic?user=datomic&password=datomic";
 
 Peer.createDatabase(uri);
 conn = Peer.connect(uri);

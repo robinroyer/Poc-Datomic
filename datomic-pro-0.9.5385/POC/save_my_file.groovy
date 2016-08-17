@@ -68,25 +68,8 @@ else{
 }
 //  ============================================================ checking done
 
-
-
-// =====================DEV
-SCHEMA_PATH = "./POC/test-schema.edn";
-uri = "datomic:mem://coucou";
-Peer.createDatabase(uri);
+uri = "datomic:sql://thales?jdbc:postgresql://localhost:5432/datomic?user=datomic&password=datomic";
 conn = Peer.connect(uri);
-reader = new FileReader("./POC/test-schema.edn");
-List tx = Util.readAll(reader).get(0);
-txResult = conn.transact(tx).get();
-
-println "===================================== Making a partition";
-
-
-partition_tx = [["db/id": Peer.tempid(":db.part/db"),
-                 "db/ident": ":files",
-                 "db.install/_partition": "db.part/db"]];
-txResult = conn.transact(partition_tx).get()
-//  =================== DEV
 
 query = "[:find ?id :in \$ ?a ?b :where  [ ?id  :files/satelite ?a ] [?id :files/version ?b] ]";
 results = Peer.q(query, conn.db(), NAME, VERSION);

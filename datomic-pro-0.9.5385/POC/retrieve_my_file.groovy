@@ -81,92 +81,11 @@ else{
 }
 //  ============================================================ checking done
 
-// ============================ dev
-SCHEMA_PATH = "./POC/test-schema.edn";
-uri = "datomic:mem://coucou";
+
+uri = "datomic:sql://thales?jdbc:postgresql://localhost:5432/datomic?user=datomic&password=datomic";
+
 Peer.createDatabase(uri);
 conn = Peer.connect(uri);
-reader = new FileReader("./POC/test-schema.edn");
-List tx = Util.readAll(reader).get(0);
-txResult = conn.transact(tx).get();
-
-
-partition_tx = [["db/id": Peer.tempid(":db.part/db"),
-                 "db/ident": ":files",
-                 "db.install/_partition": "db.part/db"]];
-txResult = conn.transact(partition_tx).get()
-id = Peer.tempid(":files")
-
-try {
-  File file = new File( "./POC/datomic_input/file_to_save.txt");
-  BufferedReader reader = new BufferedReader(new FileReader (file));
-    String         line = null;
-    StringBuilder  stringBuilder = new StringBuilder();
-    String         ls = System.getProperty("line.separator");
-
-      while((line = reader.readLine()) != null) {
-          stringBuilder.append(line);
-          stringBuilder.append(ls);
-      }
-
-      data = stringBuilder.toString();
-  }
-  catch(e){
-    println "error in file reading"
-    System.exit(0)
-  }
-  finally {
-      reader.close();
-  }
-
-
-List tx2 = Util.list (Util.map (
-  ":db/id", id,
-  ":files/data", data,
-  ":files/satelite", "name",
-  ":files/version", "version",
-  ":files/tag", "tag"
-));
-
-tx_Result = conn.transact(tx2).get();
-
-  query = """[
-        :find ?id ?data ?name ?version ?tag
-        :where
-          [ ?id :files/data ?data]
-          [ ?id :files/version ?version]
-          [ ?id :files/satelite ?name]
-          [ ?id :files/tag ?tag]
-        ]
-      """;
-  results = Peer.q(query, conn.db());
-  // println results
-
-
-
-id = Peer.tempid(":files")
-  List tx3 = Util.list (Util.map (
-  ":db/id", id,
-  ":files/data", data,
-  ":files/satelite", "name",
-  ":files/version", "version2",
-  ":files/tag", "tag"
-));
-
-tx_Result = conn.transact(tx3).get();
-
-  query = """[
-        :find ?id ?data ?name ?version ?tag
-        :where
-          [ ?id :files/data ?data]
-          [ ?id :files/version ?version]
-          [ ?id :files/satelite ?name]
-          [ ?id :files/tag ?tag]
-        ]
-      """;
-  results = Peer.q(query, conn.db());
-
-// ============================ dev
 
 
 if(TAG == "") {
