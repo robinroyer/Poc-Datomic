@@ -1,0 +1,17 @@
+[
+ ;; files
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :files/id
+  :db/valueType :db.type/long
+  :db/cardinality :db.cardinality/one
+  :db/doc "the id of the file"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :files/data
+  :db/valueType :db.type/string 
+  :db/cardinality :db.cardinality/one
+  :db/doc "the string of the files"
+  :db.install/_attribute :db.part/db}
+]
