@@ -4,6 +4,8 @@ println "===================================== importing libs";
 import datomic.Peer
 import datomic.Connection
 import datomic.Util
+import org.apache.commons.io.IOUtils
+
 
 println "===================================== create and connect to the DB";
 
@@ -18,18 +20,33 @@ List tx = Util.readAll(reader).get(0);
 txResult = conn.transact(tx).get();
 //println txResult
 
-//File file = new File("./file_to_save.txt");
-//InputStream stm = new FileInputStream(file);
-//import org.apache.commons.io.IOUtils
 
- //Byte[]data = IOUtils.toByteArray(stm);
- //List tx = Util.list (Util.map (":db/id",1,":files/data",data));
+File file = new File("./POC/file_to_save.txt");
+BufferedReader reader = new BufferedReader(new FileReader (file));
+  String         line = null;
+  StringBuilder  stringBuilder = new StringBuilder();
+  String         ls = System.getProperty("line.separator");
+
+  try {
+      while((line = reader.readLine()) != null) {
+          stringBuilder.append(line);
+          stringBuilder.append(ls);
+      }
+
+      data = stringBuilder.toString();
+  } finally {
+      reader.close();
+  }
 
 
-//tx Result = conn.transact(tx).get();
+println data
+List tx2 = Util.list (Util.map (":db/id", 1, ":files/data", data));
+
+
+tx_Result = conn.transact(tx2).get();
 db = conn.db();
 
-query = "[:find ?d :where [ ?c :files/data ?d]]";
+query = "[:find ?d :where [ _ :files/data ?d]]";
 results = Peer.q(query, db);
 println " =========> there is " + results.size() + " results: "
 for (result in results) {

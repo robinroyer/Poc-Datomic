@@ -47,3 +47,19 @@
 2016-08-20 21:13:53.114 INFO  default    datomic.process-monitor - {:event :metrics/initializing, :metricsCallback clojure.core/identity, :msec 0.735, :phase :end, :pid 60819, :tid 1}
 2016-08-20 21:13:53.114 INFO  default    datomic.process-monitor - {:metrics/started clojure.core/identity, :pid 60819, :tid 1}
 2016-08-20 21:13:53.119 INFO  default    datomic.process-monitor - {:DbAddFulltextMsec {:lo 0, :hi 127, :sum 160, :count 5}, :AvailableMB 854.0, :event :metrics, :pid 60819, :tid 10}
+2016-08-20 21:23:33.322 INFO  default    datomic.process-monitor - {:event :metrics/initializing, :metricsCallback clojure.core/identity, :phase :begin, :pid 62616, :tid 1}
+2016-08-20 21:23:33.336 INFO  default    datomic.process-monitor - {:event :metrics/initializing, :metricsCallback clojure.core/identity, :msec 0.637, :phase :end, :pid 62616, :tid 1}
+2016-08-20 21:23:33.336 INFO  default    datomic.process-monitor - {:metrics/started clojure.core/identity, :pid 62616, :tid 1}
+2016-08-20 21:23:33.341 INFO  default    datomic.process-monitor - {:DbAddFulltextMsec {:lo 0, :hi 115, :sum 147, :count 5}, :AvailableMB 854.0, :event :metrics, :pid 62616, :tid 10}
+2016-08-20 21:23:50.469 INFO  default    datomic.process-monitor - {:event :metrics/initializing, :metricsCallback clojure.core/identity, :phase :begin, :pid 62645, :tid 1}
+2016-08-20 21:23:50.483 INFO  default    datomic.process-monitor - {:event :metrics/initializing, :metricsCallback clojure.core/identity, :msec 1.02, :phase :end, :pid 62645, :tid 1}
+2016-08-20 21:23:50.484 INFO  default    datomic.process-monitor - {:metrics/started clojure.core/identity, :pid 62645, :tid 1}
+2016-08-20 21:23:50.489 INFO  default    datomic.process-monitor - {:DbAddFulltextMsec {:lo 0, :hi 129, :sum 168, :count 5}, :AvailableMB 854.0, :event :metrics, :pid 62645, :tid 10}
+2016-08-20 21:26:03.715 INFO  default    datomic.process-monitor - {:event :metrics/initializing, :metricsCallback clojure.core/identity, :phase :begin, :pid 63050, :tid 1}
+2016-08-20 21:26:03.730 INFO  default    datomic.process-monitor - {:event :metrics/initializing, :metricsCallback clojure.core/identity, :msec 0.848, :phase :end, :pid 63050, :tid 1}
+2016-08-20 21:26:03.731 INFO  default    datomic.process-monitor - {:metrics/started clojure.core/identity, :pid 63050, :tid 1}
+2016-08-20 21:26:03.737 INFO  default    datomic.process-monitor - {:DbAddFulltextMsec {:lo 0, :hi 119, :sum 170, :count 5}, :AvailableMB 858.0, :event :metrics, :pid 63050, :tid 10}
+2016-08-20 21:26:32.355 INFO  default    datomic.process-monitor - {:event :metrics/initializing, :metricsCallback clojure.core/identity, :phase :begin, :pid 63221, :tid 1}
+2016-08-20 21:26:32.372 INFO  default    datomic.process-monitor - {:event :metrics/initializing, :metricsCallback clojure.core/identity, :msec 1.19, :phase :end, :pid 63221, :tid 1}
+2016-08-20 21:26:32.372 INFO  default    datomic.process-monitor - {:metrics/started clojure.core/identity, :pid 63221, :tid 1}
+2016-08-20 21:26:32.377 INFO  default    datomic.process-monitor - {:DbAddFulltextMsec {:lo 0, :hi 144, :sum 181, :count 5}, :AvailableMB 825.0, :event :metrics, :pid 63221, :tid 10}
