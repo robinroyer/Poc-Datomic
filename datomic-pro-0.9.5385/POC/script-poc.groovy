@@ -7,8 +7,8 @@ import datomic.Util
 
 println "===================================== create and connect to the DB";
 
-uri = "datomic:mem://coucou"; 
-Peer.createDatabase(uri); 
+uri = "datomic:mem://coucou";
+Peer.createDatabase(uri);
 conn = Peer.connect(uri);
 
 println "===================================== load a db schema from file";
@@ -20,11 +20,11 @@ txResult = conn.transact(tx).get();
 
 //File file = new File("./file_to_save.txt");
 //InputStream stm = new FileInputStream(file);
-//import org.apache.commons.io.IOUtils 
+//import org.apache.commons.io.IOUtils
 
- //Byte[]data = IOUtils.toByteArray(stm); 
- //List tx = Util.list (Util.map (":db/id",1,":files/data",data)); 
- 
+ //Byte[]data = IOUtils.toByteArray(stm);
+ //List tx = Util.list (Util.map (":db/id",1,":files/data",data));
+
 
 //tx Result = conn.transact(tx).get();
 db = conn.db();
@@ -38,7 +38,7 @@ for (result in results) {
 
 
 
-//tab = result.toArray(); 
+//tab = result.toArray();
 //db.entity.get(":files/data")
 //result.iterator().next().get(0);
 //byte[]cc = (byte[])data;
