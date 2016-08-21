@@ -5,6 +5,7 @@ import datomic.Connection
 import datomic.Util
 import org.apache.commons.io.IOUtils
 
+// ./bin/groovysh ./POC/save_my_file.groovy -tag=thetag -file=POC/datomic_input/file_to_save.txt -version=myversion -satelite=satelitename
 
 FILE = ""
 NAME = ""
@@ -87,12 +88,14 @@ partition_tx = [["db/id": Peer.tempid(":db.part/db"),
 txResult = conn.transact(partition_tx).get()
 //  =================== DEV
 
-println "===================================== looking for a record from the same satelite in the same version";
-query = "[:find ?id  :where [ ?id :files/data ?data] [ ?id :files/version " + VERSION +  "] [ ?id :files/satelite " + NAME + "] ]";
-results = Peer.q(query, conn.db());
+query = "[:find ?id :in \$ ?a ?b :where  [ ?id  :files/satelite ?a ] [?id :files/version ?b] ]";
+results = Peer.q(query, conn.db(), NAME, VERSION);
 
-for (result in results) {
-  println  result
+try {
+  id = results.iterator().next().get(0)
+}
+catch(Exception e) {
+  id = Peer.tempid(":files")
 }
 
 
@@ -119,10 +122,9 @@ try {
       reader.close();
   }
 
-d = Peer.tempid(":files")
 
 List tx2 = Util.list (Util.map (
-  ":db/id", d,
+  ":db/id", id,
   ":files/data", data,
   ":files/satelite", NAME,
   ":files/version", VERSION,
@@ -131,22 +133,66 @@ List tx2 = Util.list (Util.map (
 
 tx_Result = conn.transact(tx2).get();
 
-//  ==================== dev
-println "===================================== looking for a record from the same satelite in the same version";
-query = "[:find ?id  :where [ ?id :files/version " + VERSION +  "] [ ?id :files/satelite " + NAME + "] ]";
-results = Peer.q(query, conn.db());
 
-println query
-for (result in results) {
-  println  result
-}
 
-// query = "[:find ?id ?data ?name ?version ?tag :where [ ?id :files/data ?data] [ ?id :files/version ?version] [ ?id :files/satelite ?name] [ ?id :files/tag ?tag] ]";
-// results = Peer.q(query, conn.db());
-// println "    ===> there are " + results.size() + " results: "
 
-// for (result in results) {
-//   println  result
+
+// ================================================= TEST
+
+// println id
+// query = "[:find ?id :in \$ ?a ?b :where  [ ?id  :files/satelite ?a ] [?id :files/version ?b] ]";
+// results = Peer.q(query, conn.db(), NAME, VERSION);
+
+// try {
+//   id = results.iterator().next().get(0)
 // }
+// catch(Exception e) {
+//   id = Peer.tempid(":files")
+// }
+
+
+// println "===================================== Storing files to  datomic";
+// try {
+//   File file = new File( FILE);
+//   BufferedReader reader = new BufferedReader(new FileReader (file));
+//     String         line = null;
+//     StringBuilder  stringBuilder = new StringBuilder();
+//     String         ls = System.getProperty("line.separator");
+
+//       while((line = reader.readLine()) != null) {
+//           stringBuilder.append(line);
+//           stringBuilder.append(ls);
+//       }
+
+//       data = stringBuilder.toString();
+//   }
+//   catch(e){
+//     println "error in file reading"
+//     System.exit(0)
+//   }
+//   finally {
+//       reader.close();
+//   }
+
+
+// tx2 = Util.list (Util.map (
+//   ":db/id", id,
+//   ":files/data", data,
+//   ":files/satelite", "TEST",
+//   ":files/version", VERSION,
+//   ":files/tag", TAG
+// ));
+
+// tx_Result = conn.transact(tx2).get();
+
+
+// //  ==================== dev
+// println "===================================== looking for a record from the same satelite in the same version";
+// query = "[:find ?id ?a ?b :where  [ ?id  :files/satelite ?a ] [?id :files/version ?b] ]";
+// results = Peer.q(query, conn.db(), NAME, VERSION);
+
+// println results.size()
+// println results
+
 System.exit(0)
 
