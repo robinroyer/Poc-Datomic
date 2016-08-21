@@ -56,21 +56,50 @@ BufferedReader reader = new BufferedReader(new FileReader (file));
   }
 
 d = Peer.tempid(":files")
+println d
+
 List tx2 = Util.list (Util.map (
   ":db/id", d,
   ":files/data", data,
-  ":files/satelite", "name",
+  ":files/satelite", "name1",
   ":files/version", "version",
   ":files/tag", "tag"
 ));
 tx_Result = conn.transact(tx2).get();
 
+// ===================================================
+
+results = Peer.query(
+  "[:find [?when ...] :where [?tx :db/txInstant ?when]]",
+  conn.db())
+
+tx_dates = new ArrayList()
+for (result in results) tx_dates.add(result)
+Collections.sort(tx_dates)
+Collections.reverse(tx_dates)
+
+data_tx_date = tx_dates.get(0)
+schema_tx_date = tx_dates.get(1)
+
+// ===================================================
+
+d2 = Peer.tempid(":files")
+println d2
+List tx3 = Util.list (Util.map (
+  ":db/id", d2,
+  ":files/data", data,
+  ":files/satelite", "name2",
+  ":files/version", "version",
+  ":files/tag", "tag"
+));
+tx_Result = conn.transact(tx3).get();
+
 
 println "===================================== Retrieving files from the datomic";
-
+ println schema_tx_date
 query = "[:find ?id ?data ?name ?version ?tag :where [ ?id :files/data ?data] [ ?id :files/version ?version] [ ?id :files/satelite ?name] [ ?id :files/tag ?tag] ]";
 results = Peer.q(query, conn.db());
-println "    ===> there is " + results.size() + " results: "
+println "    ===> there are " + results.size() + " results: "
 
 for (result in results) {
   string_data = result[1]
@@ -85,6 +114,22 @@ for (result in results) {
   }
 }
 
+query = "[:find ?id ?data ?name ?version ?tag :where [ ?id :files/data ?data] [ ?id :files/version ?version] [ ?id :files/satelite ?name] [ ?id :files/tag ?tag] ]";
+results = Peer.q(query, conn.db().asOf(data_tx_date));
+println "    ===> there are " + results.size() + " results: "
+
+for (result in results) {
+  string_data = result[1]
+  try{
+    println result
+    PrintWriter out = new PrintWriter( OUTPUT_DIRECTORY + "output.txt" );
+    out.write( string_data );
+    out.close();
+  }
+  catch(e){
+    println "  /!\\ /!\\ /!\\ ERROR ON FILE WRITING /!\\ /!\\ /!\\ "
+  }
+}
 
 
 println "===================================== End of the POC the file retrieved is xx.txt";

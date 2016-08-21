@@ -2,14 +2,6 @@
  ;; files
 
  {:db/id #db/id[:db.part/db]
-  :db/ident :files/id
-  :db/valueType :db.type/long
-  :db/cardinality :db.cardinality/one
-  :db/doc "the id of the file"
-  :db/index true
-  :db.install/_attribute :db.part/db}
-
- {:db/id #db/id[:db.part/db]
   :db/ident :files/data
   :db/valueType :db.type/string
   :db/cardinality :db.cardinality/one
@@ -18,7 +10,6 @@
 
   {:db/id #db/id[:db.part/db]
   :db/ident :files/satelite
-  :db/unique :db.unique/identity
   :db/valueType :db.type/string
   :db/cardinality :db.cardinality/one
   :db/doc "the id of the satelite"
