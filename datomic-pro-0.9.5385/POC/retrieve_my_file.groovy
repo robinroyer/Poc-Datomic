@@ -14,6 +14,7 @@ NAME = ""
 VERSION = ""
 TAG = ""
 DATE = ""
+OUTPUT_DIRECTORY = "./POC/datomic_output/";
 
 //  ============================================================ checking for params
 
@@ -141,6 +142,30 @@ tx_Result = conn.transact(tx2).get();
   results = Peer.q(query, conn.db());
   // println results
 
+
+
+id = Peer.tempid(":files")
+  List tx3 = Util.list (Util.map (
+  ":db/id", id,
+  ":files/data", data,
+  ":files/satelite", "name",
+  ":files/version", "version2",
+  ":files/tag", "tag"
+));
+
+tx_Result = conn.transact(tx3).get();
+
+  query = """[
+        :find ?id ?data ?name ?version ?tag
+        :where
+          [ ?id :files/data ?data]
+          [ ?id :files/version ?version]
+          [ ?id :files/satelite ?name]
+          [ ?id :files/tag ?tag]
+        ]
+      """;
+  results = Peer.q(query, conn.db());
+
 // ============================ dev
 
 
@@ -149,11 +174,13 @@ if(TAG == "") {
     // ================================================= tag empty version empty and date empty
     if(DATE == "") {
       query = """[
-        :find ?id ?data ?name
+        :find ?id ?data ?name ?version ?tag
         :in \$ ?name
         :where
           [ ?id :files/data ?data]
+          [ ?id :files/version ?version]
           [ ?id :files/satelite ?name]
+          [ ?id :files/tag ?tag]
         ]
       """;
   results = Peer.q(query, conn.db(), NAME);
@@ -161,11 +188,13 @@ if(TAG == "") {
     // ================================================= tag empty and version empty
     else {
       query = """[
-        :find ?id ?data ?name
+        :find ?id ?data ?name ?version ?tag
         :in \$ ?name
         :where
           [ ?id :files/data ?data]
+          [ ?id :files/version ?version]
           [ ?id :files/satelite ?name]
+          [ ?id :files/tag ?tag]
         ]
       """;
     results = Peer.q(query, conn.db().asOf(DATE), NAME);
@@ -174,12 +203,13 @@ if(TAG == "") {
   // ================================================= tag empty and date empty
   else if (DATE == "") {
     query = """[
-        :find ?id ?data ?name ?version
+        :find ?id ?data ?name ?version ?tag
         :in \$ ?name ?version
         :where
           [ ?id :files/data ?data]
           [ ?id :files/version ?version]
           [ ?id :files/satelite ?name]
+          [ ?id :files/tag ?tag]
         ]
       """;
     results = Peer.q(query, conn.db(), NAME, VERSION);
@@ -187,12 +217,13 @@ if(TAG == "") {
   // ================================================= tag empty
   else{
     query = """[
-        :find ?id ?data ?name ?version
+        :find ?id ?data ?name ?version ?tag
         :in \$ ?name ?version
         :where
           [ ?id :files/data ?data]
           [ ?id :files/version ?version]
           [ ?id :files/satelite ?name]
+          [ ?id :files/tag ?tag]
         ]
       """;
     results = Peer.q(query, conn.db().asOf(DATE), NAME, VERSION);
@@ -202,12 +233,14 @@ else if (VERSION == ""){
   // ================================================= version empty and date empty
   if(DATE == "") {
     query = """[
-        :find ?id ?data ?name ?tag
+        :find ?id ?data ?name ?version ?tag
         :in \$ ?name ?tag
         :where
           [ ?id :files/data ?data]
+          [ ?id :files/version ?version]
           [ ?id :files/satelite ?name]
           [ ?id :files/tag ?tag]
+
         ]
       """;
     results = Peer.q(query, conn.db(), NAME, TAG);
@@ -215,10 +248,11 @@ else if (VERSION == ""){
   //================================================= version empty
   else {
     query = """[
-        :find ?id ?data ?name ?tag
+        :find ?id ?data ?name ? version ?tag
         :in \$ ?name ?tag
         :where
           [ ?id :files/data ?data]
+          [ ?id :files/version ?version]
           [ ?id :files/satelite ?name]
           [ ?id :files/tag ?tag]
         ]
@@ -267,12 +301,13 @@ for (result in results) {
   // string_data = result[1]
   try{
     println result
-    // PrintWriter out = new PrintWriter( OUTPUT_DIRECTORY + "output.txt" );
-    // out.write( string_data );
-    // out.close();
+    PrintWriter out = new PrintWriter( OUTPUT_DIRECTORY + result[2] + "#" + result[3] + ":" + result[4] + ":" + DATE + ".txt" );
+    out.write( result[1] );
+    out.close();
   }
   catch(e){
     println "  /!\\ /!\\ /!\\ ERROR ON FILE WRITING /!\\ /!\\ /!\\ "
+    println e
   }
 }
 
