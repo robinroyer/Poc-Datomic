@@ -62,11 +62,10 @@ if (quit) {
           """
 System.exit(0)
 }
+else{
+  println "Execution the script for the file : " + FILE + " corresponding to the satelite : " + NAME + ", and the version : " + VERSION + " : " + TAG
+}
 //  ============================================================ checking done
-
-
-
-
 
 
 
@@ -88,13 +87,16 @@ partition_tx = [["db/id": Peer.tempid(":db.part/db"),
 txResult = conn.transact(partition_tx).get()
 //  =================== DEV
 
+println "===================================== looking for a record from the same satelite in the same version";
+query = "[:find ?id  :where [ ?id :files/data ?data] [ ?id :files/version " + VERSION +  "] [ ?id :files/satelite " + NAME + "] ]";
+results = Peer.q(query, conn.db());
+
+for (result in results) {
+  println  result
+}
 
 
-
-
-println FILE
-
-println "===================================== Storing files to the datomic";
+println "===================================== Storing files to  datomic";
 try {
   File file = new File( FILE);
   BufferedReader reader = new BufferedReader(new FileReader (file));
@@ -118,7 +120,6 @@ try {
   }
 
 d = Peer.tempid(":files")
-println d
 
 List tx2 = Util.list (Util.map (
   ":db/id", d,
@@ -131,13 +132,21 @@ List tx2 = Util.list (Util.map (
 tx_Result = conn.transact(tx2).get();
 
 //  ==================== dev
-
-query = "[:find ?id ?data ?name ?version ?tag :where [ ?id :files/data ?data] [ ?id :files/version ?version] [ ?id :files/satelite ?name] [ ?id :files/tag ?tag] ]";
+println "===================================== looking for a record from the same satelite in the same version";
+query = "[:find ?id  :where [ ?id :files/version " + VERSION +  "] [ ?id :files/satelite " + NAME + "] ]";
 results = Peer.q(query, conn.db());
-println "    ===> there are " + results.size() + " results: "
 
+println query
 for (result in results) {
   println  result
 }
+
+// query = "[:find ?id ?data ?name ?version ?tag :where [ ?id :files/data ?data] [ ?id :files/version ?version] [ ?id :files/satelite ?name] [ ?id :files/tag ?tag] ]";
+// results = Peer.q(query, conn.db());
+// println "    ===> there are " + results.size() + " results: "
+
+// for (result in results) {
+//   println  result
+// }
 System.exit(0)
 
