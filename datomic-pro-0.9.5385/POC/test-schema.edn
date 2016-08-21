@@ -6,6 +6,7 @@
   :db/valueType :db.type/long
   :db/cardinality :db.cardinality/one
   :db/doc "the id of the file"
+  :db/index true
   :db.install/_attribute :db.part/db}
 
  {:db/id #db/id[:db.part/db]
@@ -13,5 +14,27 @@
   :db/valueType :db.type/string
   :db/cardinality :db.cardinality/one
   :db/doc "the string of the files"
+  :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+  :db/ident :files/satelite
+  :db/unique :db.unique/identity
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "the id of the satelite"
+  :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+  :db/ident :files/version
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "the version of the records"
+  :db.install/_attribute :db.part/db}
+
+  {:db/id #db/id[:db.part/db]
+  :db/ident :files/tag
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "taging a record (optional)"
   :db.install/_attribute :db.part/db}
 ]

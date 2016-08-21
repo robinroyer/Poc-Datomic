@@ -26,15 +26,6 @@ List tx = Util.readAll(reader).get(0);
 txResult = conn.transact(tx).get();
 
 
-println "===================================== Making a partition";
-
-
-
-partition_tx = [["db/id": Peer.tempid(":db.part/db"),
-                 "db/ident": ":files",
-                 "db.install/_partition": "db.part/db"]];
-txResult = conn.transact(partition_tx).get()
-
 
 println "===================================== Storing files to the datomic";
 
@@ -55,27 +46,22 @@ BufferedReader reader = new BufferedReader(new FileReader (file));
       reader.close();
   }
 
-d = Peer.tempid(":files")
-List tx2 = Util.list (Util.map (
-  ":db/id", d,
-  ":files/data", data,
-  ":files/satelite", "name",
-  ":files/version", "version",
-  ":files/tag", "tag"
-));
+
+List tx2 = Util.list (Util.map (":db/id", 1, ":files/data", data));
 tx_Result = conn.transact(tx2).get();
+
 
 
 println "===================================== Retrieving files from the datomic";
 
-query = "[:find ?id ?data ?name ?version ?tag :where [ ?id :files/data ?data] [ ?id :files/version ?version] [ ?id :files/satelite ?name] [ ?id :files/tag ?tag] ]";
-results = Peer.q(query, conn.db());
+db = conn.db();
+query = "[:find ?d :where [ _ :files/data ?d]]";
+results = Peer.q(query, db);
 println "    ===> there is " + results.size() + " results: "
 
 for (result in results) {
-  string_data = result[1]
+  string_data = result[0]
   try{
-    println result
     PrintWriter out = new PrintWriter( OUTPUT_DIRECTORY + "output.txt" );
     out.write( string_data );
     out.close();
